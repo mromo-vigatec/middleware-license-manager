@@ -35,6 +35,7 @@
             this.panelCertificadoInfo = new System.Windows.Forms.Panel();
             this.lblInfoCertificado = new System.Windows.Forms.Label();
             this.btnEliminarCertificado = new System.Windows.Forms.Button();
+            this.btnCargarCertificado = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnGenerarCertificados
@@ -45,13 +46,30 @@
             this.btnGenerarCertificados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGenerarCertificados.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGenerarCertificados.ForeColor = System.Drawing.Color.White;
-            this.btnGenerarCertificados.Location = new System.Drawing.Point(250, 200);
+            this.btnGenerarCertificados.Location = new System.Drawing.Point(175, 200);
             this.btnGenerarCertificados.Name = "btnGenerarCertificados";
-            this.btnGenerarCertificados.Size = new System.Drawing.Size(300, 50);
+            this.btnGenerarCertificados.Size = new System.Drawing.Size(200, 50);
             this.btnGenerarCertificados.TabIndex = 0;
             this.btnGenerarCertificados.Text = "Generar Certificados";
             this.btnGenerarCertificados.UseVisualStyleBackColor = false;
             this.btnGenerarCertificados.Click += new System.EventHandler(this.btnGenerarCertificados_Click);
+            // 
+            // btnCargarCertificado
+            // 
+            this.btnCargarCertificado.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnCargarCertificado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
+
+            this.btnCargarCertificado.FlatAppearance.BorderSize = 0;
+            this.btnCargarCertificado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCargarCertificado.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCargarCertificado.ForeColor = System.Drawing.Color.White;
+            this.btnCargarCertificado.Location = new System.Drawing.Point(425, 200);
+            this.btnCargarCertificado.Name = "btnCargarCertificado";
+            this.btnCargarCertificado.Size = new System.Drawing.Size(200, 50);
+            this.btnCargarCertificado.TabIndex = 5;
+            this.btnCargarCertificado.Text = "Cargar Certificado";
+            this.btnCargarCertificado.UseVisualStyleBackColor = false;
+            this.btnCargarCertificado.Click += new System.EventHandler(this.btnCargarCertificado_Click);
             // 
             // lblTitulo
             // 
@@ -136,6 +154,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnCargarCertificado);
             this.Controls.Add(this.panelCertificadoInfo);
             this.Controls.Add(this.lblEstadoCertificado);
             this.Controls.Add(this.lblEstado);
@@ -161,6 +180,7 @@
         private System.Windows.Forms.Panel panelCertificadoInfo;
         private System.Windows.Forms.Label lblInfoCertificado;
         private System.Windows.Forms.Button btnEliminarCertificado;
+        private System.Windows.Forms.Button btnCargarCertificado;
     }
 }
 

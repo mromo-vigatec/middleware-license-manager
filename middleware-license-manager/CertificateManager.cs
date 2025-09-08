@@ -57,6 +57,109 @@ namespace middleware_license_manager
         }
 
         /// <summary>
+        /// Carga un certificado desde un archivo externo y lo guarda como certificado interno
+        /// </summary>
+        /// <param name="filePath">Ruta del archivo del certificado</param>
+        /// <param name="password">Contraseña del certificado</param>
+        /// <returns>Información del certificado cargado</returns>
+        public static CertificateInfo LoadCertificateFromFile(string filePath, string password)
+        {
+            try
+            {
+                // Verificar que el archivo existe
+                if (!File.Exists(filePath))
+                    throw new FileNotFoundException("El archivo de certificado no existe.");
+
+                // Leer el archivo del certificado
+                var certificateData = File.ReadAllBytes(filePath);
+
+                // Intentar cargar el certificado para validarlo
+                X509Certificate2 cert;
+                try
+                {
+                    cert = new X509Certificate2(certificateData, password);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("No se pudo cargar el certificado. Verifique la contraseña.", ex);
+                }
+
+                // Verificar que el certificado tiene clave privada
+                if (!cert.HasPrivateKey)
+                {
+                    throw new Exception("El certificado seleccionado no contiene una clave privada. Se requiere un archivo .pfx o .p12 con clave privada.");
+                }
+
+                // Extraer información del certificado
+                string commonName = ExtractCommonName(cert.Subject);
+                string organization = ExtractOrganization(cert.Subject);
+                string country = ExtractCountry(cert.Subject);
+
+                // Guardar como certificado interno
+                SaveInternalCertificate(certificateData, password, commonName, organization, country);
+
+                // Retornar información del certificado
+                return new CertificateInfo
+                {
+                    CommonName = commonName,
+                    Organization = organization,
+                    Country = country,
+                    CreatedDate = DateTime.Now
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al cargar el certificado: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Extrae el nombre común (CN) del subject del certificado
+        /// </summary>
+        private static string ExtractCommonName(string subject)
+        {
+            return ExtractSubjectComponent(subject, "CN=");
+        }
+
+        /// <summary>
+        /// Extrae la organización (O) del subject del certificado
+        /// </summary>
+        private static string ExtractOrganization(string subject)
+        {
+            return ExtractSubjectComponent(subject, "O=");
+        }
+
+        /// <summary>
+        /// Extrae el país (C) del subject del certificado
+        /// </summary>
+        private static string ExtractCountry(string subject)
+        {
+            return ExtractSubjectComponent(subject, "C=");
+        }
+
+        /// <summary>
+        /// Extrae un componente específico del subject del certificado
+        /// </summary>
+        private static string ExtractSubjectComponent(string subject, string prefix)
+        {
+            try
+            {
+                var index = subject.IndexOf(prefix);
+                if (index == -1) return "No especificado";
+
+                var start = index + prefix.Length;
+                var end = subject.IndexOf(',', start);
+                if (end == -1) end = subject.Length;
+
+                return subject.Substring(start, end - start).Trim();
+            }
+            catch
+            {
+                return "No especificado";
+            }
+        }
+
+        /// <summary>
         /// Verifica si existe un certificado interno para la aplicación
         /// </summary>
         /// <returns>True si existe un certificado válido</returns>

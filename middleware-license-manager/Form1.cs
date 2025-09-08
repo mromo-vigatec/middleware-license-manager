@@ -54,6 +54,84 @@ namespace middleware_license_manager
             }
         }
 
+        private void btnCargarCertificado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Preguntar si quiere reemplazar el certificado existente
+                if (CertificateManager.HasInternalCertificate())
+                {
+                    var result = MessageBox.Show(
+                        "Ya existe un certificado configurado. ¿Desea cargar uno nuevo y reemplazar el actual?\n\n" +
+                        "ADVERTENCIA: Esto invalidará todas las licencias generadas con el certificado anterior.",
+                        "Confirmar reemplazo",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (result != DialogResult.Yes)
+                        return;
+                }
+
+                // Abrir diálogo para seleccionar archivo de certificado
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                {
+                    Title = "Seleccionar Certificado",
+                    Filter = "Archivos de Certificado (*.pfx;*.p12)|*.pfx;*.p12|Todos los archivos (*.*)|*.*",
+                    FilterIndex = 1,
+                    CheckFileExists = true,
+                    CheckPathExists = true
+                };
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Solicitar contraseña del certificado
+                    var formPassword = new FormPasswordCertificado();
+                    formPassword.FilePath = openFileDialog.FileName;
+
+                    if (formPassword.ShowDialog() == DialogResult.OK)
+                    {
+                        lblEstado.Text = "Cargando certificado...";
+                        lblEstado.ForeColor = Color.Orange;
+                        Application.DoEvents();
+
+                        try
+                        {
+                            // Cargar el certificado desde el archivo
+                            var certInfo = CertificateManager.LoadCertificateFromFile(
+                                openFileDialog.FileName,
+                                formPassword.Password);
+
+                            lblEstado.Text = "Certificado cargado exitosamente";
+                            lblEstado.ForeColor = Color.Green;
+
+                            MessageBox.Show($"Certificado cargado exitosamente:\n\n" +
+                                          $"Nombre Común: {certInfo.CommonName}\n" +
+                                          $"Organización: {certInfo.Organization}\n" +
+                                          $"País: {certInfo.Country}\n\n" +
+                                          $"✓ El certificado se ha configurado internamente para generar licencias.",
+                                          "Certificado Cargado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Actualizar la interfaz
+                            ActualizarEstadoCertificado();
+                        }
+                        catch (Exception ex)
+                        {
+                            lblEstado.Text = "Error al cargar certificado";
+                            lblEstado.ForeColor = Color.Red;
+                            MessageBox.Show($"Error al cargar el certificado:\n\n{ex.Message}", 
+                                          "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lblEstado.Text = "Error al cargar certificado";
+                lblEstado.ForeColor = Color.Red;
+                MessageBox.Show($"Error inesperado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void ActualizarEstadoCertificado()
         {
             if (CertificateManager.HasInternalCertificate())
@@ -66,7 +144,7 @@ namespace middleware_license_manager
 
                     lblInfoCertificado.Text = $"CN: {certInfo.CommonName}\n" +
                                             $"Organización: {certInfo.Organization}\n" +
-                                            $"Creado: {certInfo.CreatedDate:dd/MM/yyyy HH:mm}";
+                                            $"Configurado: {certInfo.CreatedDate:dd/MM/yyyy HH:mm}";
 
                     panelCertificadoInfo.Visible = true;
                     btnGenerarCertificados.Text = "Regenerar Certificados";
