@@ -23,6 +23,7 @@ namespace middleware_license_manager
         private void Form1_Load(object sender, EventArgs e)
         {
             ActualizarEstadoCertificado();
+            ActualizarEstadoBotonLicencia();
         }
 
         private void btnEliminarCertificado_Click(object sender, EventArgs e)
@@ -40,6 +41,7 @@ namespace middleware_license_manager
                 {
                     CertificateManager.DeleteInternalCertificate();
                     ActualizarEstadoCertificado();
+                    ActualizarEstadoBotonLicencia();
                     lblEstado.Text = "Certificado eliminado";
                     lblEstado.ForeColor = Color.Orange;
 
@@ -113,6 +115,7 @@ namespace middleware_license_manager
 
                             // Actualizar la interfaz
                             ActualizarEstadoCertificado();
+                            ActualizarEstadoBotonLicencia();
                         }
                         catch (Exception ex)
                         {
@@ -129,6 +132,63 @@ namespace middleware_license_manager
                 lblEstado.Text = "Error al cargar certificado";
                 lblEstado.ForeColor = Color.Red;
                 MessageBox.Show($"Error inesperado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnGenerarLicencia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Verificar que haya un certificado configurado
+                if (!CertificateManager.HasInternalCertificate())
+                {
+                    MessageBox.Show("No hay un certificado configurado para generar licencias.\n\n" +
+                                  "Primero debe generar o cargar un certificado.",
+                                  "Certificado Requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Abrir formulario para configurar la licencia
+                var formLicencia = new FormGenerarLicencia();
+                if (formLicencia.ShowDialog() == DialogResult.OK)
+                {
+                    lblEstado.Text = "Configurando licencia...";
+                    lblEstado.ForeColor = Color.Orange;
+                    Application.DoEvents();
+
+                    // Por ahora solo mostrar los datos capturados
+                    var mensaje = new StringBuilder();
+                    mensaje.AppendLine("Licencia configurada exitosamente:");
+                    mensaje.AppendLine();
+                    mensaje.AppendLine($"📋 Número Serial: {formLicencia.NumeroSerial}");
+                    mensaje.AppendLine($"📅 Fecha de Expiración: {formLicencia.FechaExpiracion:dd/MM/yyyy}");
+                    
+                    if (!string.IsNullOrWhiteSpace(formLicencia.IdentificacionDisco))
+                        mensaje.AppendLine($"💽 ID de Disco: {formLicencia.IdentificacionDisco}");
+                    else
+                        mensaje.AppendLine("💽 ID de Disco: (No especificado)");
+                    
+                    if (!string.IsNullOrWhiteSpace(formLicencia.NumeroMAC))
+                        mensaje.AppendLine($"🌐 Número MAC: {formLicencia.NumeroMAC}");
+                    else
+                        mensaje.AppendLine("🌐 Número MAC: (No especificado)");
+
+                    mensaje.AppendLine();
+                    mensaje.AppendLine("ℹ️ La generación de archivos de licencia se implementará próximamente.");
+
+                    lblEstado.Text = "Licencia configurada";
+                    lblEstado.ForeColor = Color.Green;
+
+                    MessageBox.Show(mensaje.ToString(), "Licencia Configurada", 
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                lblEstado.Text = "Error al configurar licencia";
+                lblEstado.ForeColor = Color.Red;
+                MessageBox.Show($"Error al configurar la licencia: {ex.Message}", 
+                              "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -157,6 +217,24 @@ namespace middleware_license_manager
             else
             {
                 MostrarEstadoSinCertificado();
+            }
+        }
+
+        private void ActualizarEstadoBotonLicencia()
+        {
+            // Habilitar/deshabilitar el botón de generar licencia según el estado del certificado
+            bool tieneCertificado = CertificateManager.HasInternalCertificate();
+            btnGenerarLicencia.Enabled = tieneCertificado;
+            
+            if (!tieneCertificado)
+            {
+                btnGenerarLicencia.BackColor = Color.FromArgb(200, 200, 200);
+                btnGenerarLicencia.ForeColor = Color.FromArgb(100, 100, 100);
+            }
+            else
+            {
+                btnGenerarLicencia.BackColor = Color.FromArgb(255, 193, 7);
+                btnGenerarLicencia.ForeColor = Color.Black;
             }
         }
 
@@ -257,6 +335,7 @@ namespace middleware_license_manager
 
                                 // Actualizar la interfaz
                                 ActualizarEstadoCertificado();
+                                ActualizarEstadoBotonLicencia();
                             }
                         }
                     }

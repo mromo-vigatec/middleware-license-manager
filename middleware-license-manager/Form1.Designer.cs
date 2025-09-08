@@ -36,6 +36,7 @@
             this.lblInfoCertificado = new System.Windows.Forms.Label();
             this.btnEliminarCertificado = new System.Windows.Forms.Button();
             this.btnCargarCertificado = new System.Windows.Forms.Button();
+            this.btnGenerarLicencia = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnGenerarCertificados
@@ -44,11 +45,11 @@
             this.btnGenerarCertificados.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
             this.btnGenerarCertificados.FlatAppearance.BorderSize = 0;
             this.btnGenerarCertificados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGenerarCertificados.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGenerarCertificados.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGenerarCertificados.ForeColor = System.Drawing.Color.White;
-            this.btnGenerarCertificados.Location = new System.Drawing.Point(175, 200);
+            this.btnGenerarCertificados.Location = new System.Drawing.Point(120, 200);
             this.btnGenerarCertificados.Name = "btnGenerarCertificados";
-            this.btnGenerarCertificados.Size = new System.Drawing.Size(200, 50);
+            this.btnGenerarCertificados.Size = new System.Drawing.Size(160, 50);
             this.btnGenerarCertificados.TabIndex = 0;
             this.btnGenerarCertificados.Text = "Generar Certificados";
             this.btnGenerarCertificados.UseVisualStyleBackColor = false;
@@ -58,18 +59,33 @@
             // 
             this.btnCargarCertificado.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCargarCertificado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
-
             this.btnCargarCertificado.FlatAppearance.BorderSize = 0;
             this.btnCargarCertificado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCargarCertificado.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCargarCertificado.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCargarCertificado.ForeColor = System.Drawing.Color.White;
-            this.btnCargarCertificado.Location = new System.Drawing.Point(425, 200);
+            this.btnCargarCertificado.Location = new System.Drawing.Point(320, 200);
             this.btnCargarCertificado.Name = "btnCargarCertificado";
-            this.btnCargarCertificado.Size = new System.Drawing.Size(200, 50);
+            this.btnCargarCertificado.Size = new System.Drawing.Size(160, 50);
             this.btnCargarCertificado.TabIndex = 5;
             this.btnCargarCertificado.Text = "Cargar Certificado";
             this.btnCargarCertificado.UseVisualStyleBackColor = false;
             this.btnCargarCertificado.Click += new System.EventHandler(this.btnCargarCertificado_Click);
+            // 
+            // btnGenerarLicencia
+            // 
+            this.btnGenerarLicencia.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnGenerarLicencia.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(193)))), ((int)(((byte)(7)))));
+            this.btnGenerarLicencia.FlatAppearance.BorderSize = 0;
+            this.btnGenerarLicencia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGenerarLicencia.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGenerarLicencia.ForeColor = System.Drawing.Color.Black;
+            this.btnGenerarLicencia.Location = new System.Drawing.Point(520, 200);
+            this.btnGenerarLicencia.Name = "btnGenerarLicencia";
+            this.btnGenerarLicencia.Size = new System.Drawing.Size(160, 50);
+            this.btnGenerarLicencia.TabIndex = 6;
+            this.btnGenerarLicencia.Text = "Generar Licencia";
+            this.btnGenerarLicencia.UseVisualStyleBackColor = false;
+            this.btnGenerarLicencia.Click += new System.EventHandler(this.btnGenerarLicencia_Click);
             // 
             // lblTitulo
             // 
@@ -77,11 +93,12 @@
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+
             this.lblTitulo.Location = new System.Drawing.Point(250, 50);
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(300, 30);
             this.lblTitulo.TabIndex = 1;
-            this.lblTitulo.Text = "Generador de Certificados";
+            this.lblTitulo.Text = "Middleware License Manager";
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblEstado
@@ -154,13 +171,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnGenerarLicencia);
             this.Controls.Add(this.btnCargarCertificado);
             this.Controls.Add(this.panelCertificadoInfo);
             this.Controls.Add(this.lblEstadoCertificado);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.btnGenerarCertificados);
-            this.MinimumSize = new System.Drawing.Size(600, 400);
+            this.MinimumSize = new System.Drawing.Size(800, 450);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Middleware License Manager";
@@ -181,6 +199,7 @@
         private System.Windows.Forms.Label lblInfoCertificado;
         private System.Windows.Forms.Button btnEliminarCertificado;
         private System.Windows.Forms.Button btnCargarCertificado;
+        private System.Windows.Forms.Button btnGenerarLicencia;
     }
 }
 
