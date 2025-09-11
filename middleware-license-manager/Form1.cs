@@ -152,35 +152,84 @@ namespace middleware_license_manager
                 var formLicencia = new FormGenerarLicencia();
                 if (formLicencia.ShowDialog() == DialogResult.OK)
                 {
-                    lblEstado.Text = "Configurando licencia...";
+                    lblEstado.Text = "Generando licencia...";
                     lblEstado.ForeColor = Color.Orange;
                     Application.DoEvents();
 
-                    // Por ahora solo mostrar los datos capturados
-                    var mensaje = new StringBuilder();
-                    mensaje.AppendLine("Licencia configurada exitosamente:");
-                    mensaje.AppendLine();
-                    mensaje.AppendLine($"📋 Número Serial: {formLicencia.NumeroSerial}");
-                    mensaje.AppendLine($"📅 Fecha de Expiración: {formLicencia.FechaExpiracion:dd/MM/yyyy}");
-                    
-                    if (!string.IsNullOrWhiteSpace(formLicencia.IdentificacionDisco))
-                        mensaje.AppendLine($"💽 ID de Disco: {formLicencia.IdentificacionDisco}");
-                    else
-                        mensaje.AppendLine("💽 ID de Disco: (No especificado)");
-                    
-                    if (!string.IsNullOrWhiteSpace(formLicencia.NumeroMAC))
-                        mensaje.AppendLine($"🌐 Número MAC: {formLicencia.NumeroMAC}");
-                    else
-                        mensaje.AppendLine("🌐 Número MAC: (No especificado)");
+                    try
+                    {
+                        // Obtener el certificado para firmar
+                        var certificado = CertificateManager.LoadInternalCertificate();
 
-                    mensaje.AppendLine();
-                    mensaje.AppendLine("ℹ️ La generación de archivos de licencia se implementará próximamente.");
+                        // Configurar el SaveFileDialog para guardar la licencia
+                        SaveFileDialog saveDialog = new SaveFileDialog
+                        {
+                            Title = "Guardar Archivo de Licencia",
+                            Filter = "Archivos de Licencia (*.lic)|*.lic|Todos los archivos (*.*)|*.*",
+                            FilterIndex = 1,
+                            FileName = LicenseGenerator.GenerarNombreArchivoLicencia(formLicencia.NumeroSerial),
+                            DefaultExt = "lic"
+                        };
 
-                    lblEstado.Text = "Licencia configurada";
-                    lblEstado.ForeColor = Color.Green;
+                        if (saveDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            // Generar el archivo de licencia
+                            LicenseGenerator.GenerarArchivoLicencia(
+                                formLicencia.NumeroSerial,
+                                formLicencia.NumeroUUID,
+                                formLicencia.SerialDisco,
+                                formLicencia.FechaExpiracion,
+                                saveDialog.FileName,
+                                certificado
+                            );
 
-                    MessageBox.Show(mensaje.ToString(), "Licencia Configurada", 
-                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            lblEstado.Text = "Licencia generada exitosamente";
+                            lblEstado.ForeColor = Color.Green;
+
+                            // Mostrar resumen de la licencia generada
+                            var mensaje = new StringBuilder();
+                            mensaje.AppendLine("✅ Licencia generada exitosamente:");
+                            mensaje.AppendLine();
+                            mensaje.AppendLine($"📋 Número Serial: {formLicencia.NumeroSerial}");
+                            mensaje.AppendLine($"🔑 UUID del Sistema: {formLicencia.NumeroUUID}");
+                            mensaje.AppendLine($"💽 Serial del Disco: {formLicencia.SerialDisco}");
+                            mensaje.AppendLine($"📅 Fecha de Expiración: {formLicencia.FechaExpiracion:dd/MM/yyyy}");
+                            mensaje.AppendLine();
+                            mensaje.AppendLine($"📁 Archivo guardado en:");
+                            mensaje.AppendLine($"   {saveDialog.FileName}");
+                            mensaje.AppendLine();
+                            
+                            if (certificado != null)
+                            {
+                                mensaje.AppendLine("🔐 Licencia firmada digitalmente");
+                                mensaje.AppendLine($"   Certificado: {certificado.Subject}");
+                            }
+                            else
+                            {
+                                mensaje.AppendLine("⚠️ Licencia generada sin firma digital");
+                            }
+
+                            MessageBox.Show(mensaje.ToString(), "Licencia Generada", 
+                                          MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Preguntar si quiere abrir la carpeta donde se guardó
+                            var result = MessageBox.Show("¿Desea abrir la carpeta donde se guardó la licencia?",
+                                                        "Abrir Carpeta", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            
+                            if (result == DialogResult.Yes)
+                            {
+                                string carpeta = Path.GetDirectoryName(saveDialog.FileName);
+                                System.Diagnostics.Process.Start("explorer.exe", carpeta);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        lblEstado.Text = "Error al generar licencia";
+                        lblEstado.ForeColor = Color.Red;
+                        MessageBox.Show($"Error al generar el archivo de licencia:\n\n{ex.Message}", 
+                                      "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception ex)

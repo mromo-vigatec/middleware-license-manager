@@ -7,22 +7,22 @@ namespace middleware_license_manager
     public partial class FormGenerarLicencia : Form
     {
         private TextBox txtNumeroSerial;
+        private TextBox txtNumeroUUID;
+        private TextBox txtSerialDisco;
         private DateTimePicker dtpFechaExpiracion;
-        private TextBox txtIdentificacionDisco;
-        private TextBox txtNumeroMAC;
         private Button btnGenerar;
         private Button btnCancelar;
         
         private Label lblNumeroSerial;
+        private Label lblNumeroUUID;
+        private Label lblSerialDisco;
         private Label lblFechaExpiracion;
-        private Label lblIdentificacionDisco;
-        private Label lblNumeroMAC;
         private Label lblTitulo;
 
         public string NumeroSerial { get; private set; }
+        public string NumeroUUID { get; private set; }
+        public string SerialDisco { get; private set; }
         public DateTime FechaExpiracion { get; private set; }
-        public string IdentificacionDisco { get; private set; }
-        public string NumeroMAC { get; private set; }
 
         public FormGenerarLicencia()
         {
@@ -33,22 +33,22 @@ namespace middleware_license_manager
         {
             // Inicializar controles
             this.txtNumeroSerial = new TextBox();
+            this.txtNumeroUUID = new TextBox();
+            this.txtSerialDisco = new TextBox();
             this.dtpFechaExpiracion = new DateTimePicker();
-            this.txtIdentificacionDisco = new TextBox();
-            this.txtNumeroMAC = new TextBox();
             this.btnGenerar = new Button();
             this.btnCancelar = new Button();
             
             this.lblNumeroSerial = new Label();
+            this.lblNumeroUUID = new Label();
+            this.lblSerialDisco = new Label();
             this.lblFechaExpiracion = new Label();
-            this.lblIdentificacionDisco = new Label();
-            this.lblNumeroMAC = new Label();
             this.lblTitulo = new Label();
 
             this.SuspendLayout();
 
             // Configuración del formulario
-            this.ClientSize = new Size(500, 380);
+            this.ClientSize = new Size(500, 350);
             this.Text = "Generar Nueva Licencia";
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -64,8 +64,8 @@ namespace middleware_license_manager
             this.lblTitulo.ForeColor = Color.FromArgb(51, 51, 51);
             this.lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
 
-            // Número Serial del Equipo (Campo requerido)
-            this.lblNumeroSerial.Text = "Número Serial del Equipo: * (Ej: ABC123-XYZ789-DEF456)";
+            // Número Serial
+            this.lblNumeroSerial.Text = "Número Serial: *";
             this.lblNumeroSerial.Location = new Point(30, 70);
             this.lblNumeroSerial.Size = new Size(440, 20);
             this.lblNumeroSerial.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
@@ -74,48 +74,49 @@ namespace middleware_license_manager
             this.txtNumeroSerial.Location = new Point(30, 95);
             this.txtNumeroSerial.Size = new Size(440, 25);
             this.txtNumeroSerial.Font = new Font("Segoe UI", 10F);
+            this.txtNumeroSerial.Text = "SN-" + DateTime.Now.ToString("yyyyMMdd") + "-001";
 
-            // Fecha de Expiración (Campo requerido)
-            this.lblFechaExpiracion.Text = "Fecha de Expiración: *";
-            this.lblFechaExpiracion.Location = new Point(30, 140);
-            this.lblFechaExpiracion.Size = new Size(200, 20);
+            // Número UUID del Sistema
+            this.lblNumeroUUID.Text = "Número UUID del Sistema: *";
+            this.lblNumeroUUID.Location = new Point(30, 130);
+            this.lblNumeroUUID.Size = new Size(440, 20);
+            this.lblNumeroUUID.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            this.lblNumeroUUID.ForeColor = Color.FromArgb(51, 51, 51);
+
+            this.txtNumeroUUID.Location = new Point(30, 155);
+            this.txtNumeroUUID.Size = new Size(440, 25);
+            this.txtNumeroUUID.Font = new Font("Segoe UI", 10F);
+            this.txtNumeroUUID.Text = Guid.NewGuid().ToString();
+
+            // Serial del Disco
+            this.lblSerialDisco.Text = "Serial del Disco: *";
+            this.lblSerialDisco.Location = new Point(30, 190);
+            this.lblSerialDisco.Size = new Size(440, 20);
+            this.lblSerialDisco.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            this.lblSerialDisco.ForeColor = Color.FromArgb(51, 51, 51);
+
+            this.txtSerialDisco.Location = new Point(30, 215);
+            this.txtSerialDisco.Size = new Size(440, 25);
+            this.txtSerialDisco.Font = new Font("Segoe UI", 10F);
+            this.txtSerialDisco.Text = "DISK-" + DateTime.Now.ToString("yyyyMMdd") + "-" + new Random().Next(1000, 9999);
+
+            // Fecha de Expiración
+            this.lblFechaExpiracion.Text = "Fecha de Expiración de la Licencia: *";
+            this.lblFechaExpiracion.Location = new Point(30, 250);
+            this.lblFechaExpiracion.Size = new Size(440, 20);
             this.lblFechaExpiracion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             this.lblFechaExpiracion.ForeColor = Color.FromArgb(51, 51, 51);
 
-            this.dtpFechaExpiracion.Location = new Point(30, 165);
+            this.dtpFechaExpiracion.Location = new Point(30, 275);
             this.dtpFechaExpiracion.Size = new Size(440, 25);
             this.dtpFechaExpiracion.Font = new Font("Segoe UI", 10F);
             this.dtpFechaExpiracion.Format = DateTimePickerFormat.Long;
             this.dtpFechaExpiracion.MinDate = DateTime.Now.Date;
             this.dtpFechaExpiracion.Value = DateTime.Now.AddYears(1);
 
-            // Número de Identificación de Disco (Campo opcional)
-            this.lblIdentificacionDisco.Text = "Número de Identificación de Disco (Ej: 1234-5678-9ABC-DEF0):";
-            this.lblIdentificacionDisco.Location = new Point(30, 210);
-            this.lblIdentificacionDisco.Size = new Size(440, 20);
-            this.lblIdentificacionDisco.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            this.lblIdentificacionDisco.ForeColor = Color.FromArgb(102, 102, 102);
-
-            this.txtIdentificacionDisco.Location = new Point(30, 235);
-            this.txtIdentificacionDisco.Size = new Size(440, 25);
-            this.txtIdentificacionDisco.Font = new Font("Segoe UI", 10F);
-            this.txtIdentificacionDisco.BackColor = Color.FromArgb(250, 250, 250);
-
-            // Número MAC del Equipo (Campo opcional)
-            this.lblNumeroMAC.Text = "Número MAC del Equipo (Ej: 00:1B:44:11:3A:B7):";
-            this.lblNumeroMAC.Location = new Point(30, 280);
-            this.lblNumeroMAC.Size = new Size(440, 20);
-            this.lblNumeroMAC.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            this.lblNumeroMAC.ForeColor = Color.FromArgb(102, 102, 102);
-
-            this.txtNumeroMAC.Location = new Point(30, 305);
-            this.txtNumeroMAC.Size = new Size(440, 25);
-            this.txtNumeroMAC.Font = new Font("Segoe UI", 10F);
-            this.txtNumeroMAC.BackColor = Color.FromArgb(250, 250, 250);
-
             // Botón Generar
             this.btnGenerar.Text = "Generar Licencia";
-            this.btnGenerar.Location = new Point(285, 340);
+            this.btnGenerar.Location = new Point(285, 310);
             this.btnGenerar.Size = new Size(120, 35);
             this.btnGenerar.BackColor = Color.FromArgb(255, 193, 7);
             this.btnGenerar.ForeColor = Color.Black;
@@ -127,7 +128,7 @@ namespace middleware_license_manager
 
             // Botón Cancelar
             this.btnCancelar.Text = "Cancelar";
-            this.btnCancelar.Location = new Point(415, 340);
+            this.btnCancelar.Location = new Point(415, 310);
             this.btnCancelar.Size = new Size(75, 35);
             this.btnCancelar.BackColor = Color.FromArgb(108, 117, 125);
             this.btnCancelar.ForeColor = Color.White;
@@ -140,9 +141,9 @@ namespace middleware_license_manager
             this.Controls.AddRange(new Control[] {
                 lblTitulo,
                 lblNumeroSerial, txtNumeroSerial,
+                lblNumeroUUID, txtNumeroUUID,
+                lblSerialDisco, txtSerialDisco,
                 lblFechaExpiracion, dtpFechaExpiracion,
-                lblIdentificacionDisco, txtIdentificacionDisco,
-                lblNumeroMAC, txtNumeroMAC,
                 btnGenerar, btnCancelar
             });
 
@@ -154,8 +155,22 @@ namespace middleware_license_manager
             // Validar campos requeridos
             if (string.IsNullOrWhiteSpace(txtNumeroSerial.Text))
             {
-                MessageBox.Show("El número serial del equipo es requerido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El número serial es requerido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtNumeroSerial.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNumeroUUID.Text))
+            {
+                MessageBox.Show("El número UUID del sistema es requerido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNumeroUUID.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtSerialDisco.Text))
+            {
+                MessageBox.Show("El serial del disco es requerido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSerialDisco.Focus();
                 return;
             }
 
@@ -167,34 +182,31 @@ namespace middleware_license_manager
                 return;
             }
 
-            // Validar formato MAC si se proporciona
-            if (!string.IsNullOrWhiteSpace(txtNumeroMAC.Text))
+            // Validar formato UUID básico (opcional, puede ser más estricto)
+            if (!EsFormatoUUIDValido(txtNumeroUUID.Text.Trim()))
             {
-                if (!EsFormatoMACValido(txtNumeroMAC.Text.Trim()))
-                {
-                    MessageBox.Show("El formato del número MAC no es válido. Use el formato: XX:XX:XX:XX:XX:XX", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtNumeroMAC.Focus();
-                    return;
-                }
+                MessageBox.Show("El formato del UUID no es válido. Debe ser un GUID válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNumeroUUID.Focus();
+                return;
             }
 
             // Asignar valores
             NumeroSerial = txtNumeroSerial.Text.Trim();
+            NumeroUUID = txtNumeroUUID.Text.Trim();
+            SerialDisco = txtSerialDisco.Text.Trim();
             FechaExpiracion = dtpFechaExpiracion.Value.Date;
-            IdentificacionDisco = txtIdentificacionDisco.Text.Trim();
-            NumeroMAC = txtNumeroMAC.Text.Trim();
 
             this.Close();
         }
 
-        private bool EsFormatoMACValido(string mac)
+        private bool EsFormatoUUIDValido(string uuid)
         {
-            if (string.IsNullOrWhiteSpace(mac))
-                return true; // Es opcional
+            if (string.IsNullOrWhiteSpace(uuid))
+                return false;
 
-            // Formato típico: XX:XX:XX:XX:XX:XX donde X es un dígito hexadecimal
-            var patron = @"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
-            return System.Text.RegularExpressions.Regex.IsMatch(mac, patron);
+            // Intentar convertir a GUID para validar formato
+            Guid guidResult;
+            return Guid.TryParse(uuid, out guidResult);
         }
 
         protected override void OnLoad(EventArgs e)
