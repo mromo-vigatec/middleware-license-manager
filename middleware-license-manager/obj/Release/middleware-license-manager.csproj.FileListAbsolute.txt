@@ -1,0 +1,9 @@
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\bin\Release\middleware-license-manager.exe.config
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\bin\Release\middleware-license-manager.exe
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\bin\Release\middleware-license-manager.pdb
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\obj\Release\middleware-license-manager.csproj.AssemblyReference.cache
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\obj\Release\middleware_license_manager.Properties.Resources.resources
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\obj\Release\middleware-license-manager.csproj.GenerateResource.cache
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\obj\Release\middleware-license-manager.csproj.CoreCompileInputs.cache
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\obj\Release\middleware-license-manager.exe
+C:\Users\mromo\source\repos\middleware-license-manager\middleware-license-manager\obj\Release\middleware-license-manager.pdb

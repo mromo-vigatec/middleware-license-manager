@@ -176,7 +176,7 @@ namespace middleware_license_manager
                             // Generar el archivo de licencia
                             LicenseGenerator.GenerarArchivoLicencia(
                                 formLicencia.NumeroSerial,
-                                formLicencia.NumeroUUID,
+                                formLicencia.MachineID,
                                 formLicencia.SerialDisco,
                                 formLicencia.FechaExpiracion,
                                 saveDialog.FileName,
@@ -191,10 +191,11 @@ namespace middleware_license_manager
                             mensaje.AppendLine("✅ Licencia generada exitosamente:");
                             mensaje.AppendLine();
                             mensaje.AppendLine($"📋 Número Serial: {formLicencia.NumeroSerial}");
-                            mensaje.AppendLine($"🔑 UUID del Sistema: {formLicencia.NumeroUUID}");
+                            mensaje.AppendLine($"🔑 Machine ID: {formLicencia.MachineID}");
                             mensaje.AppendLine($"💽 Serial del Disco: {formLicencia.SerialDisco}");
                             mensaje.AppendLine($"📅 Fecha de Expiración: {formLicencia.FechaExpiracion:dd/MM/yyyy}");
                             mensaje.AppendLine();
+                            mensaje.AppendLine($"🐧 Configurada para sistema Linux");
                             mensaje.AppendLine($"📁 Archivo guardado en:");
                             mensaje.AppendLine($"   {saveDialog.FileName}");
                             mensaje.AppendLine();
@@ -337,8 +338,8 @@ namespace middleware_license_manager
                         request.CertificateExtensions.Add(new X509BasicConstraintsExtension(false, false, 0, false));
                         request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.KeyEncipherment, false));
 
-                        // Crear el certificado autofirmado
-                        var certificado = request.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(1));
+                        // Crear el certificado autofirmado con vigencia de 500 años
+                        var certificado = request.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(500));
 
                         // Exportar certificado público
                         byte[] certificadoPublico = certificado.Export(X509ContentType.Cert);

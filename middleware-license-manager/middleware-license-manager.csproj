@@ -56,6 +56,9 @@
     <Compile Include="FormGenerarLicencia.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormInformacionSistema.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormPasswordCertificado.cs">
       <SubType>Form</SubType>
     </Compile>
